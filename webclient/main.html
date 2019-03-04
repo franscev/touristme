@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Panel Administrador</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+    <style>
+        a {
+            background-color: cornflowerblue;
+            margin: 0 auto;
+        }
+
+        table {
+            margin: 0 auto;
+        }
+
+        td {
+            padding: 5px 5px;
+            font-family: 'Calibri';
+            border-bottom: 1px solid white;
+            width: 50px;
+            height: 30px;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            white-space: nowrap;
+            max-width: 150px;
+
+        }
+
+        tr {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            max-width: 1px;
+
+        }
+
+        thead {
+            text-overflow: ellipsis;
+            overflow: hidden;
+            white-space: nowrap;
+            background-color: floralwhite;
+            max-width: 1px;
+        }
+
+        h1,
+        h2 {
+            text-align: center;
+
+        }
+
+        .btn-group .button {
+            background-color: #4CAF50;
+            border: 1px solid black;
+            color: white;
+            padding: 15px 32px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            cursor: pointer;
+            width: 150px;
+            display: block;
+            margin: 0 auto;
+        }
+
+        .btn-group2 .button2 {
+            background-color: tomato;
+            border: 1px solid black;
+            color: white;
+            padding: 15px 32px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            cursor: pointer;
+            width: 150px;
+            display: block;
+            margin: 0 auto;
+        }
+
+        .button3 {
+            background-color: tomato;
+            border: 1px solid black;
+            color: white;
+            padding: 1px 6px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            cursor: pointer;
+            width: 60px;
+            display: block;
+            margin: 0 auto;
+        }
+
+        .button4 {
+            background-color: green;
+            border: 1px solid black;
+            color: white;
+            padding: 1px 6px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            cursor: pointer;
+            width: 60px;
+            display: block;
+            margin: 0 auto;
+        }
+
+        .btn-group2 .button2:hover {
+            background-color: indianred;
+
+        }
+
+        .btn-group .button:not(:last-child) {
+            border-bottom: none;
+        }
+
+        .btn-group .button:hover {
+            background-color: #3e8e41;
+        }
+
+        body {
+            background-color: floralwhite;
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <h1>TOURIST ME<br>Panel administrador</h1>
+
+    <div class="btn-group">
+        <button class="button" onclick="loadCreateUser();">Crear Usuario</button>
+
+    </div>
+    <div class="btn-group2">
+        <button class="button2" onclick="logout();">Logout</button>
+    </div>
+    <br>
+    <br>
+    <h2>Usuarios</h2>
+    <table>
+        <thead>
+            <tr>
+                <td id="id">Id</td>
+                <td id="name">Name</td>
+                <td id="email">Email</td>
+                <td style="text-overflow: ellipsis;" id="password">Password</td>
+                <td id="role_id">Role_id</td>
+            </tr>
+        </thead>
+    </table>
+
+</body>
+
+<script>
+    window.onload = function() {
+        checkLogin();
+        getUsers();
+
+    };
+
+    function checkLogin() {
+        var token = sessionStorage.getItem('token');
+        if (token == null) {
+            window.location.href = "http://localhost:8888/touristme/webclient/login.html";
+        }
+    }
+
+    function loadCreateUser() {
+        window.location.href = "http://localhost:8888/touristme/webclient/createuser.html";
+    }
+
+    function logout() {
+        sessionStorage.clear();
+        window.location.href = "http://localhost:8888/touristme/webclient/login.html";
+
+    }
+
+    function getUsers() {
+
+        $.ajax({
+
+            url: 'http://localhost:8888/touristme/public/index.php/api/user',
+
+
+            type: 'GET',
+
+            dataType: 'json',
+
+            beforeSend: function(request) {
+                request.setRequestHeader("Authorization", sessionStorage.getItem("token"));
+            },
+
+            success: function(response) {
+
+                for (var i = 0; i < response.length; i++) {
+                    $('#id').append('<tr><td>' + response[i].id + '</td></td>');
+                    $('#name').append('<tr><td>' + response[i].name + '</td></td>');
+                    $('#email').append('<tr><td>' + response[i].email + '</td></td>');
+                    $('#password').append('<tr><td>' + response[i].password + '</td></td>');
+                    $('#role_id').append('<tr><td>' + response[i].role_id + '</td><td>' + '<button class="button4" onclick="goToEdit(' + response[i].id + ');">Edit' + '<button class="button3" onclick="deleteUser(' + response[i].id + ');">Delete');
+                }
+            },
+
+            error: function(xhr, status) {
+                console.log('Error en la petición');
+            },
+
+            complete: function(xhr, status) {
+                console.log('Petición completada correctamente');
+            }
+
+        });
+    }
+
+    function goToEdit(id) {
+        sessionStorage.setItem('id', id);
+        window.location.href = "http://localhost:8888/touristme/webclient/edituser.html";
+    }
+
+    function deleteUser(id) {
+        $.ajax({
+            beforeSend: function(request) {
+                request.setRequestHeader("Authorization", sessionStorage.getItem("token"));
+            },
+
+            url: 'http://localhost:8888/touristme/public/index.php/api/user/' + id,
+
+            type: 'DELETE',
+
+
+            success: function(response) {
+                alert(response.RESPONSE);
+                window.location.href = "http://localhost:8888/touristme/webclient/main.html";
+            },
+
+            error: function(xhr, status) {
+                console.log(xhr);
+                console.log(status);
+                console.log('Error al intentar borrar usuario');
+            }
+        })
+    }
+</script>
+
+</html>

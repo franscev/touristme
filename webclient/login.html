@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Login</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <style>
+        body {
+            background-color: floralwhite;
+        }
+
+        #contenedor {
+            background-color: floralwhite;
+            width: 20%;
+            height: 30%;
+            position: absolute;
+            text-align: center;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+ td { padding-top: 15px; }
+        
+        table{
+        margin: 0 auto;}
+    </style>
+</head>
+
+<body>
+
+    <div id="contenedor">
+        <h1>Login</h1>
+
+        <table>
+            <tr>
+                <td>Email</td>
+                <td><input id="email" type="text" name="Email" required></td>
+
+            </tr>
+            <tr>
+                <td>Password</td>
+                <td><input id="password" type="password" name="Password" required></td>
+            </tr>
+
+        </table>
+        <br>
+        <button onclick="login();">Login</button>
+    </div>
+
+</body>
+
+<script>
+    function login() {
+
+        var email = document.getElementById('email').value; 
+        var password = document.getElementById('password').value;
+
+        $.ajax({
+
+            url: 'http://localhost:8888/touristme/public/index.php/api/login/web',
+
+            data: {
+                email: email,
+                password: password
+            },
+
+            type: 'POST',
+
+            dataType: 'json',
+
+            success: function(data) {
+                console.log(data);
+                sessionStorage.setItem('token', data.RESPONSE);
+                
+                window.location.href = "http://localhost:8888/touristme/webclient/main.html";
+            },
+        
+
+            error: function(xhr, status) {
+
+                alert(xhr.responseJSON['RESPONSE']);
+            },
+
+            complete: function(xhr, status) {
+                console.log('Petition complete');
+            }
+        });
+    }
+</script>
+
+</html>
+
+
+
+

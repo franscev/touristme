@@ -4,7 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class User extends Authenticatable
+class User extends Model
 {
    
    protected $table = 'users';
@@ -15,5 +15,10 @@ class User extends Authenticatable
 
     public function places(){
         return $this->hasMany('App\Place');
+    }
+
+    public function role()
+    {
+        return $this->belongsTo('App\Role');
     }
 }

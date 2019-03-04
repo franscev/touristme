@@ -10,10 +10,10 @@ class Place extends Model
 protected $table = 'places';
 
     protected $fillable = [
-        'title', 'description', 'startDate', 'endDate', 'coordX', 'coordY'];
+        'title', 'description', 'startDate', 'endDate', 'coordX', 'coordY', 'user_id'];
 
 
-    public function places(){
-        return $this->hasMany('App\User');
+    public function user(){
+        return $this->belongsTo('App\User');
     }
 }

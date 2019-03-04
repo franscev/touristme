@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Editar Usuario</title>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<style>
+		h1 {
+		font-family: 'Calibri';
+		margin-left: 10px;
+	}
+
+        .btn-group .button {
+            background-color: #4CAF50;
+            border: 1px solid black;
+            color: white;
+            padding: 5px 5px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            cursor: pointer;
+            width: 125px;
+            
+            margin: auto 0;
+        }
+
+        .btn-group .button:not(:last-child) {
+            border-bottom: none;
+             margin: auto 0;
+        }
+
+        .btn-group .button:hover {
+            background-color: #3e8e41;
+            
+        }
+
+        .btn-group2 .button2 {
+            background-color: tomato;
+            /* Green */
+            border: 1px solid black;
+            color: white;
+            padding: 5px 5px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            cursor: pointer;
+            width: 50px;
+            text-align: center;
+           
+            margin: auto 0;
+        }
+
+        .btn-group2 .button2:not(:last-child) {
+            border-bottom: none;
+        }
+
+        .btn-group2 .button2:hover {
+            background-color: darkred;
+        }
+	
+        
+        body{
+            background-color: floralwhite;
+        }
+
+	#contenedor {
+		
+            background-color: floralwhite;
+            width: 20%;
+            height: 40%;
+            position: absolute;
+            text-align: center;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            margin: 0 auto;
+	}
+
+ td { padding-top: 15px; }
+        
+    
+	</style>
+</head>
+<body>
+
+	<div id="contenedor">
+	<h1>Editar usuario </h1>
+
+	<table>
+		<tr>
+			<td>Nombre</td>
+			<td><input id="name" type="text" name="name" required></td>
+			
+		</tr>
+		<tr>
+			<td>Email</td>
+			
+			<td><input id="email" type="email" name="Email" required></td>
+		</tr>
+		<tr>
+			<td>Password</td>
+			<td><input id="password" type="password" name="Password" required></td>
+		</tr>
+		
+
+	</table> <br>
+	<div class="btn-group">
+            <button class="button" onclick="editUser();">Editar usuario</button>
+        </div>
+        <br>
+        <br>
+
+        <div class="btn-group2">
+            <button class="button2" onclick="goBackWindow();">Salir</button>
+        </div>
+        
+	</div>
+
+</body>
+
+<script>
+	
+		function editUser() {
+			var name = document.getElementById('name').value;
+			var email = document.getElementById('email').value;
+			var password = document.getElementById('password').value;
+
+			$.ajax({
+
+				url: 'http://localhost:8888/touristme/public/index.php/api/user/'+sessionStorage.getItem('id'),
+
+				beforeSend: function(request) {
+			 		request.setRequestHeader("Authorization", sessionStorage.getItem("token"));
+			 	},
+
+			 	data: {
+			 		name: name,	
+			 		email: email,
+					password: password
+				},
+
+			 	type: 'PUT',
+			 	
+			 	dataType : 'json',
+
+				success : function(data) {
+			 		alert(data.RESPONSE);
+			 		
+			 	},
+
+			 	error : function (xhr, status) {
+			 		alert(xhr.responseJSON['RESPONSE']);
+			 	},
+
+			 	complete : function(xhr, status) {
+					console.log('Petición completada');
+			 	}
+			 });
+		}
+    
+    function goBackWindow(){
+        window.location.href="http://localhost:8888/touristme/webclient/main.html";
+    }
+	</script>
+</html>

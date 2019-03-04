@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Crear Usuario</title>
+    <style>
+        body {
+            background-color: floralwhite;
+        }
+
+        #contenedor {
+            background-color: floralwhite;
+            width: 20%;
+            height: 40%;
+            position: absolute;
+            text-align: center;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            margin: 0 auto;
+        }
+
+        .btn-group .button {
+            background-color: #4CAF50;
+            /* Green */
+            border: 1px solid black;
+            color: white;
+            padding: 5px 5px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            cursor: pointer;
+            width: 125px;
+            margin: 0 auto;
+
+        }
+
+        .btn-group .button:not(:last-child) {
+            border-bottom: none;
+            /* Prevent double borders */
+        }
+
+        .btn-group .button:hover {
+            background-color: #3e8e41;
+        }
+
+        .btn-group2 .button2 {
+            background-color: tomato;
+            /* Green */
+            border: 1px solid black;
+            color: white;
+            padding: 5px 5px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            cursor: pointer;
+            width: 50px;
+            margin: 0 auto;
+
+
+        }
+
+        .btn-group2 .button2:not(:last-child) {
+            border-bottom: none;
+            /* Prevent double borders */
+        }
+
+        .btn-group2 .button2:hover {
+            background-color: darkred;
+        }
+
+        td {
+            padding-top: 15px;
+
+        }
+    </style>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+</head>
+
+<body>
+
+    <div id="contenedor">
+        <h1>Crear usuario</h1>
+
+        <table>
+            <tr>
+                <td>Nombre</td>
+                <td><input id="name" type="text" name="name" required></td>
+
+            </tr>
+            <tr>
+                <td>Email</td>
+                <td><input id="email" type="email" name="Email" required></td>
+            </tr>
+            <tr>
+                <td>Password</td>
+                <td><input id="password" type="password" name="Password" required></td>
+            </tr>
+            <tr>
+                <td>Password Confirm</td>
+                <td><input id="passwordConfirm" type="password" name="PasswordConfirm" required></td>
+            </tr>
+
+        </table>
+        <br>
+        <div class="btn-group">
+            <button class="button" onclick="createUser();">Crear usuario</button>
+        </div>
+        <br>
+        <br>
+
+        <div class="btn-group2">
+            <button class="button2" onclick="goBackWindow();">Salir</button>
+        </div>
+    </div>
+
+</body>
+
+<script>
+    function goBackWindow() {
+
+        window.location.href = "http://localhost:8888/touristme/webclient/main.html";
+    }
+
+    function createUser() {
+        var name = document.getElementById('name').value;
+        var email = document.getElementById('email').value; 
+        var password = document.getElementById('password').value;
+        var passwordConfirm = document.getElementById('passwordConfirm').value;
+
+        $.ajax({
+
+            url: 'http://localhost:8888/touristme/public/index.php/api/user',
+
+            data: {
+                name: name,
+                email: email,
+                password: password,
+                passwordConfirm: passwordConfirm
+            },
+
+            type: 'POST',
+
+            dataType: 'json',
+
+            success: function(data) {
+                alert(data.RESPONSE);
+
+            },
+
+            error: function(xhr, status) {
+
+                alert(xhr.responseJSON['RESPONSE']);
+            },
+
+            complete: function(xhr, status) {
+                console.log(xhr, status);
+                console.log('Petition complete');
+            }
+        });
+    }
+</script>
+</html>

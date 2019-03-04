@@ -17,11 +17,18 @@ class CreateUsersTable extends Migration
             $table->increments('id');
             $table->integer('role_id');
             $table->string('name');
-            $table->string('email');
+            $table->string('email', 100)->unique()->index();
             $table->string('password');
-            $table->string('passwordConfirm');
+            //$table->string('passwordConfirm');
             $table->timestamps();
         });
+
+        DB::table('users')->insert(
+            ['name' => 'admin',
+            'email' => 'admin@gmail.com',
+            'password' => encrypt('123456789'),
+            'role_id' => 1]
+        );
     }
 
     /**

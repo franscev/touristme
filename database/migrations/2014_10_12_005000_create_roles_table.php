@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreatePlacesTable extends Migration
+class CreateRolesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,17 +13,16 @@ class CreatePlacesTable extends Migration
      */
     public function up()
     {
-        Schema::create('places', function (Blueprint $table) {
+        Schema::create('roles', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('title');
-            $table->string('description');
-            $table->string('startDate');
-            $table->string('endDate');
-            $table->double('coordX');
-            $table->double('coordY');
-            $table->integer('user_id');
+            $table->string('name');
             $table->timestamps();
         });
+
+        DB::table('roles')->insert([
+            ['name' => 'administrator'],
+            ['name' => 'final']
+        ]);
     }
 
     /**
@@ -33,6 +32,6 @@ class CreatePlacesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('places');
+        Schema::dropIfExists('roles');
     }
 }
